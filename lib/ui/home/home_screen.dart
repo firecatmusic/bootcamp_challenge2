@@ -63,11 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
               backgroundColor: Colors.white,
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
+                  icon: SizedBox(child: Icon(Icons.home), width: 24, height: 24),
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.chat),
+                  icon: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircleAvatar(maxRadius: 24, minRadius: 24, backgroundImage: NetworkImage("https://www.kaorinusantara.or.id/english/wp-content/uploads/2022/10/bocchi4.jpg"))),
                   label: 'Profile',
                 ),
               ],
@@ -101,6 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           title: Container(
               width: double.infinity,
@@ -122,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 200,
                 height: 200,
                 margin: EdgeInsets.fromLTRB(16, 70, 16, 34),
-                child: CircleAvatar(maxRadius: 100, minRadius: 100, backgroundColor: Colors.grey),
+                child: CircleAvatar(maxRadius: 100, minRadius: 100, backgroundImage: NetworkImage("https://www.kaorinusantara.or.id/english/wp-content/uploads/2022/10/bocchi4.jpg")),
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
