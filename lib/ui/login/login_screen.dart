@@ -1,8 +1,14 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:bootcamp_challenge2/core/utils/hex_color.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -13,12 +19,14 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _obscureText = true;
+  final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: HexColor.fromHex("00A89D"), statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.light));
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Column(
           children: [
             header(),
@@ -42,18 +50,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: GoogleFonts.poppins(fontSize: 14),
                 textAlign: TextAlign.start,
                 keyboardType: TextInputType.visiblePassword,
-                decoration: new InputDecoration(
+                decoration: InputDecoration(
                   contentPadding: EdgeInsets.all(16),
                   fillColor: Colors.white,
                   filled: true,
                   labelText: "Password",
-                  suffixIcon: new GestureDetector(
+                  suffixIcon: GestureDetector(
                     onTap: () {
                       setState(() {
                         _obscureText = !_obscureText;
                       });
                     },
-                    child: new Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+                    child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
                   ),
                 ),
               ),
@@ -69,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(12),
                     )),
                 onPressed: () {
-                  context.push('/home');
+                  login(context);
                 },
                 child: Text(
                   "Login",
@@ -121,5 +129,15 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> login(BuildContext context) async {
+    WidgetsFlutterBinding.ensureInitialized();
+    // Obtain shared preferences.
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLogin', true);
+    final bool? isLogin = prefs.getBool('isLogin');
+    print(isLogin);
+    context.push('/home');
   }
 }

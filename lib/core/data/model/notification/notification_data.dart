@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:bootcamp_challenge2/core/utils/json_custom_parser.dart';
+
 part '../../../../gen/core/data/model/notification/notification_data.g.dart';
 
 @JsonSerializable()
@@ -53,8 +54,7 @@ class NotificationData extends Equatable {
     this.message,
   });
 
-  factory NotificationData.fromJson(Map<String, dynamic> json) =>
-      _$NotificationDataFromJson(json);
+  factory NotificationData.fromJson(Map<String, dynamic> json) => _$NotificationDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$NotificationDataToJson(this);
 

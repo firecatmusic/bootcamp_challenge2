@@ -1,4 +1,4 @@
-import 'package:bootcamp_challenge2/ui/login/register_screen.dart';
+import 'package:bootcamp_challenge2/ui/register/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'home/home_screen.dart';
 import 'package:go_router/go_router.dart';
