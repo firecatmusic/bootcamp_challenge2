@@ -24,6 +24,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.white, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.light));
     return WillPopScope(
       onWillPop: () async {
+        context.pop();
         return false;
       },
       child: SafeArea(
