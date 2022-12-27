@@ -1,3 +1,4 @@
+import 'package:bootcamp_challenge2/ui/addnote/addnote_screen.dart';
 import 'package:bootcamp_challenge2/ui/register/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'home/home_screen.dart';
@@ -21,7 +22,12 @@ var router = GoRouter(routes: [
   GoRoute(
     path: '/register',
     builder: (context, state) => const RegisterScreen(),
-  )
+  ),
+  GoRoute(
+    path: '/addnote',
+    builder: (context, state) => const AddNoteScreen(),
+  ),
+
 ]);
 
 Widget get errorPage => const Center(

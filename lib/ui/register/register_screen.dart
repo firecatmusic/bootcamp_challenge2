@@ -24,7 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        context.pop();
+          context.pop();
         return false;
       },
       child: Container(
@@ -101,12 +101,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       style: GoogleFonts.poppins(fontSize: 14),
                       textAlign: TextAlign.start,
                       keyboardType: TextInputType.visiblePassword,
-                      decoration: new InputDecoration(
+                      decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(16),
                         fillColor: Colors.white,
                         filled: true,
                         labelText: "Confirm Password",
-                        suffixIcon: new GestureDetector(
+                        suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
                               _obscure2Text = !_obscure2Text;

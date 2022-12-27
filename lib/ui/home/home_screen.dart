@@ -38,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 //Floating action button on Scaffold
                 onPressed: () {
                   //code to execute on button press
+                  context.push("/addnote");
                 },
                 backgroundColor: HexColor.fromHex("00A89D"),
                 child: Icon(Icons.add), //icon inside button
