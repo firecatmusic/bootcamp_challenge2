@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _profilePage() {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
@@ -116,11 +116,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: GoogleFonts.poppins(color: Colors.black),
               )),
         ),
-        body: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [];
-          },
-          body: Column(
+        body: SingleChildScrollView(
+          child: Column(
             children: [
               Container(
                 alignment: Alignment.center,
@@ -167,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   width: double.infinity,
                   padding: EdgeInsets.all(16),
-                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 50),
                   child: Row(children: [
                     Flexible(flex: 1, child: Text("Logout", style: GoogleFonts.poppins(fontSize: 14, color: HexColor.fromHex("#A8000B")))),
                     Flexible(child: Icon(Icons.exit_to_app, color: HexColor.fromHex("#A8000B")))
