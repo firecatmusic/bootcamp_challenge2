@@ -44,14 +44,25 @@ class _AddNoteState extends State<AddNoteScreen> {
                   width: double.infinity,
                   child: TextField(
                     controller: _title,
+                    textAlign: TextAlign.start,
                     keyboardType: TextInputType.text,
                     maxLines: 1,
-                    style: GoogleFonts.nunito(fontSize: 16, color: HexColor.fromHex("#666666")),
+                    style: GoogleFonts.poppins(fontSize: 14),
                     decoration: InputDecoration(
                       hintText: "Title",
                       hintStyle: GoogleFonts.nunito(color: HexColor.fromHex("#666666")),
                     ),
                   ),
+                  // child: TextField(
+                  //   controller: _title,
+                  //   keyboardType: TextInputType.text,
+                  //   maxLines: 1,
+                  //   style: GoogleFonts.nunito(fontSize: 16, color: HexColor.fromHex("#666666")),
+                  //   decoration: InputDecoration(
+                  //     hintText: "Title",
+                  //     hintStyle: GoogleFonts.nunito(color: HexColor.fromHex("#666666")),
+                  //   ),
+                  // ),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -91,7 +102,5 @@ class _AddNoteState extends State<AddNoteScreen> {
     );
   }
 
-  Future<void> validateNote() async {
-
-  }
+  Future<void> validateNote() async {}
 }

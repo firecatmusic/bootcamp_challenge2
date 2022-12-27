@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part '../../../gen/core/data/model/api_response.g.dart';
 
 @JsonSerializable(genericArgumentFactories: true)

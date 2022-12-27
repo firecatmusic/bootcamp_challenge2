@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:bootcamp_challenge2/core/utils/translation.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +18,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-
   final PageController controller = PageController();
 
   @override
@@ -141,7 +142,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  context.push('/editprofile');
+                },
                 child: Container(
                   width: double.infinity,
                   padding: EdgeInsets.all(16),
@@ -164,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   width: double.infinity,
                   padding: EdgeInsets.all(16),
-                  margin: EdgeInsets.fromLTRB(0, 0, 0, 50),
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 100),
                   child: Row(children: [
                     Flexible(flex: 1, child: Text("Logout", style: GoogleFonts.poppins(fontSize: 14, color: HexColor.fromHex("#A8000B")))),
                     Flexible(child: Icon(Icons.exit_to_app, color: HexColor.fromHex("#A8000B")))

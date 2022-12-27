@@ -1,14 +1,11 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:bootcamp_challenge2/core/utils/hex_color.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rounded_loading_button/rounded_loading_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -18,125 +15,116 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  bool _obscureText = true;
+  final _title = TextEditingController();
+
+  File? imageFile;
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.white, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.light));
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Column(
-          children: [
-            header(),
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.fromLTRB(16, 65, 16, 0),
-              child: TextField(
-                textAlign: TextAlign.start,
-                keyboardType: TextInputType.emailAddress,
-                style: GoogleFonts.poppins(fontSize: 14),
-                decoration: InputDecoration(labelText: "Email", contentPadding: EdgeInsets.all(16)),
-              ),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: SafeArea(
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: HexColor.fromHex("#666666")),
+              onPressed: () => context.pop(),
             ),
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.fromLTRB(16, 23, 16, 16),
-              child: TextField(
-                obscureText: _obscureText,
-                enableSuggestions: false,
-                autocorrect: false,
-                style: GoogleFonts.poppins(fontSize: 14),
-                textAlign: TextAlign.start,
-                keyboardType: TextInputType.visiblePassword,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(16),
-                  fillColor: Colors.white,
-                  filled: true,
-                  labelText: "Password",
-                  suffixIcon: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _obscureText = !_obscureText;
-                      });
-                    },
-                    child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+            title: Text("Edit Profile", style: GoogleFonts.nunito(color: HexColor.fromHex("#666666"))),
+            centerTitle: true,
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Center(
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: 200,
+                    height: 200,
+                    margin: EdgeInsets.all(32),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      image: DecorationImage(image: NetworkImage("https://www.kaorinusantara.or.id/english/wp-content/uploads/2022/10/bocchi4.jpg"), fit: BoxFit.cover),
+                    ),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        margin: EdgeInsets.fromLTRB(125, 0, 0, 0),
+                        decoration: BoxDecoration(color: HexColor.fromHex("#666666"), borderRadius: BorderRadius.circular(100)),
+                        child: GestureDetector(
+                          onTap: () async {
+                            _getFromGallery();
+                          },
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              height: 53,
-              margin: EdgeInsets.all(16),
-              child: TextButton(
-                style: TextButton.styleFrom(
-                    backgroundColor: HexColor.fromHex("00A89D"),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    )),
-                onPressed: () {
-                  login(context);
-                },
-                child: Text(
-                  "Login",
-                  style: GoogleFonts.mulish(color: Colors.white),
+                Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.fromLTRB(16, 32, 16, 32),
+                  child: TextField(
+                    controller: TextEditingController()..text = 'Crocodic Developer',
+                    textAlign: TextAlign.start,
+                    keyboardType: TextInputType.emailAddress,
+                    style: GoogleFonts.poppins(fontSize: 14),
+                    decoration: InputDecoration(labelText: "Name", contentPadding: EdgeInsets.all(16)),
+                  ),
                 ),
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              height: 53,
-              margin: EdgeInsets.all(16),
-              child: OutlinedButton(
-                style: TextButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    )),
-                onPressed: () {
-                  context.push('/register');
-                },
-                child: Text(
-                  "Register",
-                  style: GoogleFonts.mulish(color: Colors.black),
+                Container(
+                  width: double.infinity,
+                  height: 53,
+                  margin: EdgeInsets.all(16),
+                  child: TextButton(
+                    style: TextButton.styleFrom(backgroundColor: HexColor.fromHex("00A89D"), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                    onPressed: () {
+                      context.pop();
+                    },
+                    child: Text(
+                      "Save",
+                      style: GoogleFonts.mulish(color: Colors.white),
+                    ),
+                  ),
                 ),
-              ),
-            )
-          ],
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget header() {
-    return Container(
-      width: double.infinity,
-      height: 200,
-      decoration: BoxDecoration(color: HexColor.fromHex("00A89D"), borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40.0))),
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Align(
-            child: Text("My Notes", style: GoogleFonts.poppins(fontSize: 24, color: Colors.white)),
-            alignment: Alignment.centerLeft,
-          ),
-          Align(child: Text("Please login with your email and password", style: GoogleFonts.poppins(fontSize: 12, color: Colors.white)), alignment: Alignment.centerLeft),
-        ],
-      ),
+  _getFromGallery() async {
+    XFile? pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1800,
+      maxHeight: 1800,
     );
+    if (pickedFile != null) {
+      imageFile = File(pickedFile.path);
+    }
   }
 
-  Future<void> login(BuildContext context) async {
-    WidgetsFlutterBinding.ensureInitialized();
-    // Obtain shared preferences.
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isLogin', true);
-    final bool? isLogin = prefs.getBool('isLogin');
-    print(isLogin);
-    context.push('/home');
+  /// Get from Camera
+  _getFromCamera() async {
+    XFile? pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+      maxWidth: 1800,
+      maxHeight: 1800,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        imageFile = File(pickedFile.path);
+      });
+    }
   }
 }

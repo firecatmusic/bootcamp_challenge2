@@ -11,7 +11,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i5;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
-import '../core/data/datasource/api/user_api.dart' as _i9;
+import '../core/data/datasource/api/api_service.dart' as _i9;
 import '../core/utils/media_service.dart' as _i6;
 import '../core/utils/permission_service.dart' as _i7;
 import '../core/utils/refresh_token_interceptor.dart' as _i8;
@@ -44,7 +44,7 @@ _i1.GetIt $initGetIt(
   gh.factory<_i7.PermissionService>(() => _i7.PermissionServiceHandler());
   gh.factory<_i8.RefreshTokenInterceptor>(
       () => _i8.RefreshTokenInterceptor(get<_i5.FlutterSecureStorage>()));
-  gh.factory<_i9.UserApi>(() => _i9.UserApi(get<_i3.Dio>()));
+  gh.factory<_i9.ApiService>(() => _i9.ApiService(get<_i3.Dio>()));
   return get;
 }
 
