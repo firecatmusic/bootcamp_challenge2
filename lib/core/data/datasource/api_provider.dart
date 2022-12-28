@@ -12,21 +12,19 @@ import '../model/login_response.dart';
 
 class ApiProvider {
   Future<Dio> get _dio async {
-    final savedToken = getExistingToken();
     final dio = Dio(
       BaseOptions(
         baseUrl: Config.baseUrl,
         sendTimeout: Config.timeout,
         connectTimeout: Config.timeout,
-        receiveTimeout: Config.timeout,
-        headers: {'Authorization': savedToken},
+        receiveTimeout: Config.timeout
       ),
     );
 
     dio.interceptors.add(DioLoggingInterceptor(level: Level.body, compact: false));
     // dio.interceptors.add(getIt<RefreshTokenInterceptor>());
     // Obtain shared preferences.
-
+    dio.options.headers["Authorization"] = await getExistingToken();
     return dio;
   }
 
@@ -57,15 +55,17 @@ class ApiProvider {
     }
   }
 
-  Future<String?> getExistingToken() async {
+  Future<String> getExistingToken() async {
     // Obtain shared preferences.
     final prefs = await SharedPreferences.getInstance();
     final f = DateFormat('yyyy-MM-dd');
     // Try reading data from the 'action' key. If it doesn't exist, returns null.
     final String? token = prefs.getString('token');
     if (token == null) {
+      print(base64.encode(utf8.encode("${f.format(DateTime.now())}|rahasia")));
       return base64.encode(utf8.encode("${f.format(DateTime.now())}|rahasia"));
     } else {
+      print(token);
       return token;
     }
   }

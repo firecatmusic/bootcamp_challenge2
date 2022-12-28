@@ -25,6 +25,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           await prefs.setString('token', response.token.toString());
           final String? token = prefs.getString('token');
           print("token: $token");
+          emit(LoginSuccess(response));
         }else{
           emit(LoginError(response.message.toString()));
         }
