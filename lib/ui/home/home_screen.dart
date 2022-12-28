@@ -184,8 +184,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> logout(BuildContext context) async {
     WidgetsFlutterBinding.ensureInitialized();
     // Obtain shared preferences.
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
     context.go('/');
   }
 }

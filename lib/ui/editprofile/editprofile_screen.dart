@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:bootcamp_challenge2/core/utils/hex_color.dart';
+import 'package:bootcamp_challenge2/ui/editprofile/editprofile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -16,12 +17,13 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _title = TextEditingController();
-
+  final _editProfileController = EditProfileController();
   File? imageFile;
+  String imagePath = "";
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.white, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.light));
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.white, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.dark));
     return WillPopScope(
       onWillPop: () async {
         context.pop();
@@ -41,35 +43,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                Center(
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: 200,
-                    height: 200,
-                    margin: EdgeInsets.all(32),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      image: DecorationImage(image: NetworkImage("https://www.kaorinusantara.or.id/english/wp-content/uploads/2022/10/bocchi4.jpg"), fit: BoxFit.cover),
-                    ),
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        padding: EdgeInsets.all(10),
-                        margin: EdgeInsets.fromLTRB(125, 0, 0, 0),
-                        decoration: BoxDecoration(color: HexColor.fromHex("#666666"), borderRadius: BorderRadius.circular(100)),
-                        child: GestureDetector(
-                          onTap: () async {
-                            _getFromGallery();
-                          },
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                Obx(() => _editProfileController.selectedImagePath.value == '' ? defaultViewProfile() : pickedImageViewProfile(File(_editProfileController.selectedImagePath.value))),
                 Container(
                   width: double.infinity,
                   margin: EdgeInsets.fromLTRB(16, 32, 16, 32),
@@ -104,28 +78,75 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  _getFromGallery() async {
-    XFile? pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 1800,
-      maxHeight: 1800,
+  Widget defaultViewProfile() {
+    return Center(
+      child: Container(
+        alignment: Alignment.center,
+        width: 200,
+        height: 200,
+        margin: const EdgeInsets.all(32),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          image: const DecorationImage(image: NetworkImage("https://www.kaorinusantara.or.id/english/wp-content/uploads/2022/10/bocchi4.jpg"), fit: BoxFit.cover),
+        ),
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.fromLTRB(125, 0, 0, 0),
+                decoration: BoxDecoration(color: HexColor.fromHex("#666666"), borderRadius: BorderRadius.circular(100)),
+                child: GestureDetector(
+                  onTap: () async {
+                    _editProfileController.getImage();
+                  },
+                  child: const Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
-    if (pickedFile != null) {
-      imageFile = File(pickedFile.path);
-    }
   }
 
-  /// Get from Camera
-  _getFromCamera() async {
-    XFile? pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.camera,
-      maxWidth: 1800,
-      maxHeight: 1800,
+  Widget pickedImageViewProfile(File file) {
+    return Center(
+      child: Container(
+        alignment: Alignment.center,
+        width: 200,
+        height: 200,
+        margin: const EdgeInsets.all(32),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          image: DecorationImage(image: FileImage(file), fit: BoxFit.cover),
+        ),
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.fromLTRB(125, 0, 0, 0),
+                decoration: BoxDecoration(color: HexColor.fromHex("#666666"), borderRadius: BorderRadius.circular(100)),
+                child: GestureDetector(
+                  onTap: () async {
+                    _editProfileController.getImage();
+                  },
+                  child: const Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
-    if (pickedFile != null) {
-      setState(() {
-        imageFile = File(pickedFile.path);
-      });
-    }
   }
 }

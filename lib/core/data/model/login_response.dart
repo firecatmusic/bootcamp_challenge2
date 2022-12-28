@@ -20,6 +20,11 @@ class LoginResponse {
     data['token'] = token;
     return data;
   }
+
+  LoginResponse.withError(String errorMessage) {
+    message = errorMessage;
+  }
+
 }
 
 class DataLogin {
