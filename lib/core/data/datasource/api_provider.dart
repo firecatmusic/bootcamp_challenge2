@@ -13,12 +13,7 @@ import '../model/login_response.dart';
 class ApiProvider {
   Future<Dio> get _dio async {
     final dio = Dio(
-      BaseOptions(
-        baseUrl: Config.baseUrl,
-        sendTimeout: Config.timeout,
-        connectTimeout: Config.timeout,
-        receiveTimeout: Config.timeout
-      ),
+      BaseOptions(baseUrl: Config.baseUrl, sendTimeout: Config.timeout, connectTimeout: Config.timeout, receiveTimeout: Config.timeout),
     );
 
     dio.interceptors.add(DioLoggingInterceptor(level: Level.body, compact: false));
@@ -31,7 +26,7 @@ class ApiProvider {
   Future<GetTokenResponse> getToken() async {
     try {
       final dio = await _dio;
-      Response response = dio.get("api/user/get-token") as Response;
+      var response = await dio.get("api/user/get-token");
       return GetTokenResponse.fromJson(response.data);
     } catch (error, stacktrace) {
       if (kDebugMode) {
@@ -44,14 +39,20 @@ class ApiProvider {
   Future<LoginResponse> login(String email, String password) async {
     try {
       final dio = await _dio;
-      dio.options.headers['content-Type'] = 'application/x-www-form-urlencoded';
-      Response response = dio.post("api/user/login?expired=0") as Response;
+      // dio.options.headers['content-Type'] = 'application/x-www-form-urlencoded';
+      var param = FormData.fromMap({"email": email, "password": password});
+      var response = await dio.post("api/user/login?expired=0", data: param);
       return LoginResponse.fromJson(response.data);
     } catch (error, stacktrace) {
-      if (kDebugMode) {
-        print("Exception occured: $error, stacktrace: $stacktrace");
+
+      if (error is DioError) {
+        return LoginResponse.withError("${error.error}");
+      } else {
+        if (kDebugMode) {
+          print("Exception occured: $error, stacktrace: $stacktrace");
+        }
+        return LoginResponse.withError(error.toString());
       }
-      return LoginResponse.withError(error.toString());
     }
   }
 

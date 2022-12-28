@@ -39,9 +39,9 @@ class _SplashScreenState extends State<SplashScreen> {
     final bool isLogin = prefs.getBool('isLogin') ?? false;
     print(isLogin);
     if (isLogin == true) {
-      context.push('/home');
+      context.go('/home');
     } else {
-      context.push('/login');
+      context.go('/login');
     }
   }
 }

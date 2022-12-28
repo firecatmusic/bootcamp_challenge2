@@ -186,6 +186,6 @@ class _HomeScreenState extends State<HomeScreen> {
     // Obtain shared preferences.
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.clear();
-    context.go('/');
+    context.push('/');
   }
 }
