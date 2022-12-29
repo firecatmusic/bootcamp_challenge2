@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bootcamp_challenge2/ui/home/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:bootcamp_challenge2/core/utils/translation.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +20,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final PageController controller = PageController();
+  final _homeBloc = HomeBloc();
+
+
+  @override
+  void initState() {
+    _homeBloc.add(HomeLoadNoteEvent());
+    _homeBloc.add(HomeLoadProfileEvent());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

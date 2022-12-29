@@ -36,6 +36,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           final responseLogin = await apiRepo.login(email, password);
           if (responseLogin.message == "success") {
             SharedPref().saveJson("user", responseLogin.toJson());
+            await prefs.setString("email", email);
+            await prefs.setString("password", password);
             emit(LoginSuccess(responseLogin));
           } else {
             emit(LoginError(responseLogin.message.toString()));

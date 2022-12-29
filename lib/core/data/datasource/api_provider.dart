@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:bootcamp_challenge2/core/data/model/listnote_response.dart';
+import 'package:bootcamp_challenge2/core/data/model/register_response.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_logging_interceptor/dio_logging_interceptor.dart';
 import 'package:flutter/foundation.dart';
@@ -7,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../config/config.dart';
+import '../model/getprofile_response.dart';
 import '../model/gettoken_response.dart';
 import '../model/login_response.dart';
 
@@ -44,7 +47,6 @@ class ApiProvider {
       var response = await dio.post("api/user/login?expired=0", data: param);
       return LoginResponse.fromJson(response.data);
     } catch (error, stacktrace) {
-
       if (error is DioError) {
         return LoginResponse.withError("${error.error}");
       } else {
@@ -52,6 +54,59 @@ class ApiProvider {
           print("Exception occured: $error, stacktrace: $stacktrace");
         }
         return LoginResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<RegisterResponse> register(String email, String password, String name) async {
+    try {
+      final dio = await _dio;
+      // dio.options.headers['content-Type'] = 'application/x-www-form-urlencoded';
+      var param = FormData.fromMap({"email": email, "password": password, "name": name});
+      var response = await dio.post("api/user", data: param);
+      return RegisterResponse.fromJson(response.data);
+    } catch (error, stacktrace) {
+      if (error is DioError) {
+        return RegisterResponse.withError("${error.error}");
+      } else {
+        if (kDebugMode) {
+          print("Exception occured: $error, stacktrace: $stacktrace");
+        }
+        return RegisterResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ProfileResponse> getProfile() async {
+    try {
+      final dio = await _dio;
+      var response = await dio.get("api/user/profile");
+      return ProfileResponse.fromJson(response.data);
+    } catch (error, stacktrace) {
+      if (kDebugMode) {
+        print("Exception occured: $error, stacktrace: $stacktrace");
+      }
+      if (error is DioError) {
+        return ProfileResponse.withError("${error.error}");
+      } else {
+        return ProfileResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ListNoteResponse> getAllNote() async {
+    try {
+      final dio = await _dio;
+      var response = await dio.get("api/note/");
+      return ListNoteResponse.fromJson(response.data);
+    } catch (error, stacktrace) {
+      if (kDebugMode) {
+        print("Exception occured: $error, stacktrace: $stacktrace");
+      }
+      if (error is DioError) {
+        return ListNoteResponse.withError("${error.error}");
+      } else {
+        return ListNoteResponse.withError(error.toString());
       }
     }
   }

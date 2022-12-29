@@ -9,6 +9,10 @@ class ProfileResponse {
     data = json['data'] != null ? new DataProfile.fromJson(json['data']) : null;
   }
 
+  ProfileResponse.withError(String errorMessage) {
+    message = errorMessage;
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['message'] = this.message;

@@ -23,6 +23,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool _obscureText = true;
   bool _validate = false;
+
   final _email = TextEditingController();
   final _password = TextEditingController();
   final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();

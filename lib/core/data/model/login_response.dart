@@ -24,20 +24,21 @@ class LoginResponse {
   LoginResponse.withError(String errorMessage) {
     message = errorMessage;
   }
-
 }
 
 class DataLogin {
   String? id;
   String? name;
   String? email;
+  String? photo;
 
-  DataLogin({this.id, this.name, this.email});
+  DataLogin({this.id, this.name, this.email, this.photo});
 
   DataLogin.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     email = json['email'];
+    photo = json['photo'];
   }
 
   Map<String, dynamic> toJson() {
@@ -45,6 +46,7 @@ class DataLogin {
     data['id'] = id;
     data['name'] = name;
     data['email'] = email;
+    data['photo'] = photo;
     return data;
   }
 }
