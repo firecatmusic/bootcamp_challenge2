@@ -1,4 +1,5 @@
 import 'package:bootcamp_challenge2/core/data/datasource/api_provider.dart';
+import 'package:bootcamp_challenge2/core/data/model/add_note_response.dart';
 import 'package:bootcamp_challenge2/core/data/model/listnote_response.dart';
 import 'package:bootcamp_challenge2/core/data/model/login_response.dart';
 import 'package:bootcamp_challenge2/core/data/model/register_response.dart';
@@ -27,6 +28,10 @@ class ApiRepository {
 
   Future<ListNoteResponse> getAllNote() {
     return _provider.getAllNote();
+  }
+
+  Future<AddNoteResponse> addNewNote(String title,String content){
+    return _provider.addNewNote(title, content);
   }
 }
 

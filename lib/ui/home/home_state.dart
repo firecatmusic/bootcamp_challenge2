@@ -23,9 +23,8 @@ class HomeError extends HomeState {
   const HomeError(this.message);
 }
 
-/**
- * PROFILE
- * **/
+/// PROFILE
+/// **/
 
 class ProfileInitial extends HomeState {}
 

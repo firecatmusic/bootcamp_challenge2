@@ -1,13 +1,18 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:bootcamp_challenge2/ui/home/home_bloc.dart';
+import 'package:bootcamp_challenge2/ui/home/item/item_note.dart';
 import 'package:flutter/material.dart';
 import 'package:bootcamp_challenge2/core/utils/translation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/data/model/listnote_response.dart';
 import '../../core/utils/hex_color.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,7 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final PageController controller = PageController();
   final _homeBloc = HomeBloc();
-
+  var listNote = <DataNote>[];
+  final _refreshController = RefreshController(initialRefresh: false);
 
   @override
   void initState() {
@@ -101,11 +107,45 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _homePage() {
-    return Container(
-      child: Center(
-        child: Text(
-          'Home Page',
-          style: GoogleFonts.mulish(color: Colors.black),
+    return BlocProvider(
+      create: (context) => _homeBloc,
+      child: BlocListener<HomeBloc, HomeState>(
+        listener: (context, state) {
+          if (state is HomeSuccess) {
+            state.response.data?.forEach((element) {
+              listNote.add(element);
+            });
+            print(json.encode(listNote));
+          }
+        },
+        child: BlocBuilder<HomeBloc, HomeState>(
+          builder: (context, state) {
+            if (state is HomeSuccess) {
+              _refreshController.refreshCompleted();
+              return Container(
+                padding: EdgeInsets.fromLTRB(8, 8, 8, 50),
+                child: SmartRefresher(
+                  controller: _refreshController,
+                  onRefresh: refreshData,
+                  child: ListView.builder(
+                    itemCount: listNote.length,
+                    itemBuilder: (context, index) =>
+                        ItemNote(
+                          data: listNote[index],
+                          onClick: (data) => context.push('/editnote', extra: data),
+                        ),
+                  ),
+                ),
+              );
+            } else {
+              return Center(
+                child: Text(
+                  "no data",
+                  style: GoogleFonts.nunito(color: Colors.black, fontSize: 14),
+                ),
+              );
+            }
+          },
         ),
       ),
     );
@@ -189,6 +229,11 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void refreshData() async {
+    listNote.clear();
+    _homeBloc.add(HomeLoadNoteEvent());
   }
 
   Future<void> logout(BuildContext context) async {

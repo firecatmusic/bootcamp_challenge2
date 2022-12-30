@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bootcamp_challenge2/core/data/model/add_note_response.dart';
 import 'package:bootcamp_challenge2/core/data/model/listnote_response.dart';
 import 'package:bootcamp_challenge2/core/data/model/register_response.dart';
 import 'package:dio/dio.dart';
@@ -107,6 +108,24 @@ class ApiProvider {
         return ListNoteResponse.withError("${error.error}");
       } else {
         return ListNoteResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<AddNoteResponse> addNewNote(String title, String content) async {
+    try {
+      var param = FormData.fromMap({"title": title, "content": content});
+      final dio = await _dio;
+      var response = await dio.post("api/note", data: param);
+      return AddNoteResponse.fromJson(response.data);
+    } catch (error, stacktrace) {
+      if (kDebugMode) {
+        print("Exception occured: $error, stacktrace: $stacktrace");
+      }
+      if (error is DioError) {
+        return AddNoteResponse.withError("${error.error}");
+      } else {
+        return AddNoteResponse.withError(error.toString());
       }
     }
   }
